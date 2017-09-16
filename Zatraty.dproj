@@ -6,7 +6,7 @@
         <DCC_DependencyCheckOutputName>Zatraty.exe</DCC_DependencyCheckOutputName>
         <MainSource>Zatraty.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
@@ -74,6 +74,9 @@
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_Build>1</VerInfo_Build>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.1;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Icon_MainIcon>Source\Icons\zatraty.ico</Icon_MainIcon>
         <BRCC_OutputDir>.\Release\Res</BRCC_OutputDir>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
