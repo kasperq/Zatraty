@@ -3,7 +3,7 @@ unit MoneyCopier;
 interface
 
 uses MoneyZatr, DBDM, ZatrReport, MoneyCopierDM,
-  kbmMemTable;
+  RxIBQuery, Forms;
 
 type
   TMoneyCopier = class
@@ -20,7 +20,7 @@ type
   public
     Constructor Create(var db : TdDM);
     Destructor Destroy; override;
-    procedure copyCex(stkod : string; strukId, month, year : integer; vipuskList : TkbmMemTable);
+    procedure copyCex(stkod : string; strukId, month, year : integer; vipuskList : TRxIBQuery);
 
   end;
 
@@ -29,14 +29,19 @@ implementation
 { TMoneyCopier }
 
 procedure TMoneyCopier.copyCex(stkod: string; strukId, month, year: integer;
-  vipuskList: TkbmMemTable);
+                               vipuskList: TRxIBQuery);
 begin
+  dm.openBmMoney(stkod);
 
 end;
 
 constructor TMoneyCopier.Create(var db: TdDM);
 begin
+  inherited Create;
+  dm := TFMoneyCopierDM.Create(application);
 
+  dm.q_bmPath.Database := db.db;
+  dm.q_bmPath.Transaction := db.trans_read;
 end;
 
 destructor TMoneyCopier.Destroy;

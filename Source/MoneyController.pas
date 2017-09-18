@@ -30,10 +30,10 @@ procedure TMoneyController.copyFullCurrentCex;
 begin
   if (moneyCop = nil) then
     moneyCop := TMoneyCopier.Create(db);
-  vipuskList.Open;
-  vipuskList.EmptyTable;
-  vipuskList.LoadFromDataSet(vip.vipuskList, [mtcpoAppend]);
-  moneyCop.copyCex(m_sets.stkod, m_sets.strukId, m_sets.month, m_sets.year, vipuskList);
+//  vipuskList.Open;
+//  vipuskList.EmptyTable;
+//  vipuskList.LoadFromDataSet(vip.vipuskList, [mtcpoAppend]);
+  moneyCop.copyCex(m_sets.stkod, m_sets.strukId, m_sets.month, m_sets.year, vip.vipuskList);
 end;
 
 constructor TMoneyController.Create(var db: TdDM; var sets: TSettings);
