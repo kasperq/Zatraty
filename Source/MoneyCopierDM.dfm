@@ -5,12 +5,12 @@ object FMoneyCopierDM: TFMoneyCopierDM
   object q_nomenDbf: TERxQuery
     SQL.Strings = (
       'select nomen.numkcu, nomen.sklad, nomen.kei,'
-      'nomen."money", nomen.ksm_id'
+      'nomen."money", nomen.ksm_id, nomen.bals'
       'from '#39'f:\bm3\zerno1\nomen.dbf'#39' nomen'
       'where nomen.sklad = :stkod')
     EhSQL.Strings = (
       'select nomen.numkcu, nomen.sklad, nomen.kei,'
-      'nomen."money", nomen.ksm_id'
+      'nomen."money", nomen.ksm_id, nomen.bals'
       'from '#39'f:\bm3\zerno1\nomen.dbf'#39' nomen'
       'where nomen.sklad = :stkod')
     EhMacros = <>
@@ -40,15 +40,21 @@ object FMoneyCopierDM: TFMoneyCopierDM
     object q_nomenDbfKSM_ID: TFloatField
       FieldName = 'KSM_ID'
     end
+    object q_nomenDbfBALS: TStringField
+      FieldName = 'BALS'
+      Size = 5
+    end
   end
   object q_bmPath: TRxIBQuery
+    Database = dDM.db
+    Transaction = dDM.trans_read
     BufferChunks = 1000
     CachedUpdates = False
     ParamCheck = True
     SQL.Strings = (
       'select *'
       'from zatr_bm_path'
-      'wher zatr_bm_path.stkod = :stkod')
+      'where zatr_bm_path.stkod = :stkod')
     Macros = <>
     Left = 40
     Top = 32

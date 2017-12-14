@@ -2,7 +2,7 @@ unit ZatrController;
 
 interface
 
-uses DBDM, Vipusk, Departments, Settings, ZatrViewer,
+uses DBDM, Vipusk, Departments, Settings, ZatrViewer, ZatrCalcReport,
   kbmMemTable, RxIBQuery, RxMemDS, SysUtils;
 
 type
@@ -11,11 +11,9 @@ type
     db : TdDM;
     vip : TVipusk;
     m_sets : TSettings;
-    struk : TDepartments;
     zatrViewer, zatrList : TZatrViewer;
+    zCalc : TZatrCalcReport;
 
-    procedure loadDepartments;
-    procedure loadVipusk;
     procedure appendZatraToList;
 
   public
@@ -23,24 +21,25 @@ type
     Constructor Create(var db : TdDM; var sets : TSettings); overload;
     Destructor Destroy; override;
 
-    procedure loadDepartmentsAndVipusk;
+    procedure loadVipusk;
     procedure setSets(var value : TSettings);
     procedure setDB(var db : TdDM);
+
+    procedure calcZatras;
 
     procedure loadCurrentPrep;
     procedure loadPrep;
     procedure printCurrentPrep(variantNum : integer);
     procedure printCheckedPrep(variantNum : integer);
     procedure viewCheckedPrep;
-    procedure vipListSetChecked(checked : integer);
+    procedure vipListSetChecked(select : boolean);
+    procedure checkVipuskRecord;
 
 
-    function getDepartmentsList() : TkbmMemTable;
     function getVipusk() : TRxIBQuery;
     function getZatrMaterials() : TkbmMemTable;
 
 
-    property strukList : TkbmMemTable read getDepartmentsList;
     property vipuskList : TRxIBQuery read getVipusk;
     property zatrMaterials : TkbmMemTable read getZatrMaterials;
   end;
@@ -62,6 +61,31 @@ begin
   zatrList.zatrMaterials.LoadFromDataSet(zatrViewer.zatrMaterials, [mtcpoAppend]);
 end;
 
+procedure TZatrController.calcZatras;
+begin
+  vip.vipuskList.DisableControls;
+  vip.vipuskList.First;
+  if (zCalc = nil) then
+    zCalc := TZatrCalcReport.Create(db);
+  while (not vip.vipuskList.Eof) do
+  begin
+    if (vip.vipuskList.FieldByName('CHECKED').AsInteger = 1) then
+    begin
+      zCalc.calc(m_sets.drug.ksmId, m_sets.strukId, m_sets.month, m_sets.year,
+                 m_sets.dateBeginMonth, m_sets.dateEnd, m_sets.dateBeginYear,
+                 m_sets.dateBeginQuat, (m_sets.dateBeginMonth + m_sets.dateEnd)/2,
+                 Now, m_sets.drug.pf);
+    end;
+    vip.vipuskList.Next;
+  end;
+  vip.vipuskList.EnableControls;
+end;
+
+procedure TZatrController.checkVipuskRecord;
+begin
+  vip.checkCurrentRecord;
+end;
+
 constructor TZatrController.Create(var db: TdDM; var sets: TSettings);
 begin
   inherited Create;
@@ -72,15 +96,9 @@ end;
 destructor TZatrController.Destroy;
 begin
   FreeAndNil(vip);
-  FreeAndNil(struk);
   FreeAndNil(zatrViewer);
   FreeAndNil(zatrList);
   inherited Destroy;
-end;
-
-function TZatrController.getDepartmentsList: TkbmMemTable;
-begin
-  result := struk.strukList;
 end;
 
 function TZatrController.getVipusk: TRxIBQuery;
@@ -93,26 +111,11 @@ begin
   result := zatrList.zatrMaterials;
 end;
 
-procedure TZatrController.loadDepartmentsAndVipusk;
-begin
-  loadDepartments;
-//  loadVipusk;
-end;
-
-procedure TZatrController.loadDepartments;
-begin
-  if (struk = nil) then
-    struk := TDepartments.Create(db, m_sets);
-  struk.openDepartmentsList;
-  struk.strukList.First;
-end;
-
 procedure TZatrController.loadVipusk;
 begin
   if (vip = nil) then
     vip := TVipusk.Create(db, m_sets);
-  vip.openVipusk(struk.strukList.FieldByName('struk_id').AsInteger,
-                 m_sets.dateBeginMonth, m_sets.dateEnd);
+  vip.openVipusk(m_sets.strukId, m_sets.dateBeginMonth, m_sets.dateEnd);
   vip.vipuskList.First;
 end;
 
@@ -147,18 +150,9 @@ begin
   zatrList.printReport(variantNum);
 end;
 
-procedure TZatrController.vipListSetChecked(checked : integer);
+procedure TZatrController.vipListSetChecked(select : boolean);
 begin
-  vip.vipuskList.DisableControls;
-  vip.vipuskList.First;
-  while (not vip.vipuskList.Eof) do
-  begin
-    vip.vipuskList.Edit;
-    vip.vipuskList.FieldByName('CHECKED').AsInteger := checked;
-    vip.vipuskList.Post;
-    vip.vipuskList.Next;
-  end;
-  vip.vipuskList.EnableControls;
+  vip.selectAll(select);
 end;
 
 procedure TZatrController.setDB(var db: TdDM);
@@ -189,7 +183,10 @@ begin
   if (zatrViewer = nil) then
     zatrViewer := TZatrViewer.Create(db, m_sets);
   zatrViewer.prepareLoading;
-  zatrViewer.loadZatrReport(m_sets.month, m_sets.year, m_sets.stkod, m_sets.drug.koprep);
+//  zatrViewer.loadZatrReport(m_sets.month, m_sets.year, m_sets.stkod, m_sets.drug.koprep);
+  zatrViewer.loadZatrReport(m_sets.strukId, m_sets.drug.ksmId, m_sets.dateBeginMonth,
+                            m_sets.dateEnd, m_sets.dateBeginQuat,
+                            m_sets.dateBeginYear);
 end;
 
 end.

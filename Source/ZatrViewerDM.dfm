@@ -146,7 +146,6 @@ object zatrViewDM: TzatrViewDM
     end
   end
   object mem_zatra: TkbmMemTable
-    Active = True
     DesignActivation = True
     AttachedAutoRefresh = True
     AttachMaxCount = 1
@@ -348,11 +347,11 @@ object zatrViewDM: TzatrViewDM
     end
     object mem_zatraBAL: TStringField
       FieldName = 'BAL'
-      Size = 3
+      Size = 5
     end
     object mem_zatraKOMATR: TStringField
       FieldName = 'KOMATR'
-      Size = 5
+      Size = 6
     end
     object mem_zatraNMAT: TStringField
       FieldName = 'NMAT'
@@ -475,6 +474,9 @@ object zatrViewDM: TzatrViewDM
       FieldName = 'LAST_REC'
       MaxValue = 1
     end
+    object mem_zatraKSM_ID: TIntegerField
+      FieldName = 'KSM_ID'
+    end
   end
   object q_razdel: TRxIBQuery
     Database = dDM.db
@@ -519,7 +521,7 @@ object zatrViewDM: TzatrViewDM
     PrintOptions.Printer = #1055#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
     PrintOptions.PrintOnSheet = 0
     ReportOptions.CreateDate = 42783.661840659700000000
-    ReportOptions.LastChange = 42809.619849421290000000
+    ReportOptions.LastChange = 43041.697086643510000000
     ScriptLanguage = 'PascalScript'
     ScriptText.Strings = (
       'var'
@@ -740,7 +742,7 @@ object zatrViewDM: TzatrViewDM
       '  begin                 '
       '    naim := <frxZatra."NMAT">;'
       '    masterSyr.height := 32;        '
-      '    memo13.width := 92;'
+      '    memo13.width := 88;'
       '    memo7.visible := true;                                      '
       '    memo55.visible := true;  '
       '    memo14.visible := true;  '
@@ -2260,7 +2262,7 @@ object zatrViewDM: TzatrViewDM
           DataSetName = 'frxZatra'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clBlack
-          Font.Height = -12
+          Font.Height = -11
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Memo.UTF8W = (
@@ -2269,8 +2271,8 @@ object zatrViewDM: TzatrViewDM
         end
         object Memo13: TfrxMemoView
           Align = baLeft
-          Left = 60.000000000000000000
-          Width = 92.000000000000000000
+          Left = 64.000000000000000000
+          Width = 88.000000000000000000
           Height = 16.000000000000000000
           OnAfterPrint = 'Memo13OnAfterPrint'
           OnBeforePrint = 'Memo13OnBeforePrint'
@@ -2309,7 +2311,6 @@ object zatrViewDM: TzatrViewDM
           Top = 16.000000000000000000
           Width = 76.000000000000000000
           Height = 16.000000000000000000
-          DataField = 'CENA'
           DataSet = frxZatra
           DataSetName = 'frxZatra'
           DisplayFormat.DecimalSeparator = '.'
@@ -2322,7 +2323,7 @@ object zatrViewDM: TzatrViewDM
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Memo.UTF8W = (
-            '[frxZatra."CENA"]')
+            '[FloatToStr(<frxZatra."CENA">)]')
           ParentFont = False
         end
         object Memo16: TfrxMemoView
@@ -2330,7 +2331,6 @@ object zatrViewDM: TzatrViewDM
           Top = 16.000000000000000000
           Width = 76.000000000000000000
           Height = 16.000000000000000000
-          DataField = 'CENAZA'
           DataSet = frxZatra
           DataSetName = 'frxZatra'
           DisplayFormat.DecimalSeparator = '.'
@@ -2343,15 +2343,15 @@ object zatrViewDM: TzatrViewDM
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Memo.UTF8W = (
-            '[frxZatra."CENAZA"]')
+            '[FloatToStr(<frxZatra."CENAZA">)]')
           ParentFont = False
         end
         object Memo55: TfrxMemoView
           Align = baLeft
           Left = 24.000000000000000000
-          Width = 36.000000000000000000
+          Width = 40.000000000000000000
           Height = 16.000000000000000000
-          DataField = 'KOMATR'
+          DataField = 'KSM_ID'
           DataSet = frxZatra
           DataSetName = 'frxZatra'
           Font.Charset = DEFAULT_CHARSET
@@ -2360,7 +2360,7 @@ object zatrViewDM: TzatrViewDM
           Font.Name = 'Arial'
           Font.Style = [fsBold]
           Memo.UTF8W = (
-            '[frxZatra."KOMATR"]')
+            '[frxZatra."KSM_ID"]')
           ParentFont = False
           WordWrap = False
         end
@@ -3094,6 +3094,48 @@ object zatrViewDM: TzatrViewDM
   object frxZatra: TfrxDBDataset
     UserName = 'frxZatra'
     CloseDataSource = False
+    FieldAliases.Strings = (
+      'IT_NAME=IT_NAME'
+      'RAZD=RAZD'
+      'BAL=BAL'
+      'KOMATR=KOMATR'
+      'NMAT=NMAT'
+      'EDIZ=EDIZ'
+      'CENA=CENA'
+      'CENAZA=CENAZA'
+      'OST_BEG=OST_BEG'
+      'OST_BEG_S=OST_BEG_S'
+      'ZAGR=ZAGR'
+      'ZAGR_S=ZAGR_S'
+      'RASH=RASH'
+      'RASH_S=RASH_S'
+      'OST_END=OST_END'
+      'OST_END_S=OST_END_S'
+      'RASH_GOD=RASH_GOD'
+      'RASH_GOD_S=RASH_GOD_S'
+      'PEREDANO=PEREDANO'
+      'G20=G20'
+      'OTKLON=OTKLON'
+      'NAMRAZ=NAMRAZ'
+      'KOPREP=KOPREP'
+      'STRK=STRK'
+      'STRUK_ID=STRUK_ID'
+      'STNAME=STNAME'
+      'KSM_ID_PREP=KSM_ID_PREP'
+      'NMAT_PREP=NMAT_PREP'
+      'VIPUSK=VIPUSK'
+      'VIPUSK_QUAT=VIPUSK_QUAT'
+      'VIPUSK_YEAR=VIPUSK_YEAR'
+      'EDIZ_PREP=EDIZ_PREP'
+      'KEI_ID_PREP=KEI_ID_PREP'
+      'KOD_PROD=KOD_PROD'
+      'CHECKED=CHECKED'
+      'RASH_KV=RASH_KV'
+      'RASH_KV_S=RASH_KV_S'
+      'IT_RAZD=IT_RAZD'
+      'IT_BAL=IT_BAL'
+      'LAST_REC=LAST_REC'
+      'KSM_ID=KSM_ID')
     DataSet = mem_zatra
     BCDToCurrency = False
     Left = 440
@@ -3612,11 +3654,11 @@ object zatrViewDM: TzatrViewDM
     end
     object StringField3: TStringField
       FieldName = 'BAL'
-      Size = 3
+      Size = 5
     end
     object StringField4: TStringField
       FieldName = 'KOMATR'
-      Size = 5
+      Size = 6
     end
     object StringField5: TStringField
       FieldName = 'NMAT'
@@ -3734,6 +3776,9 @@ object zatrViewDM: TzatrViewDM
       DefaultExpression = '0'
       FieldName = 'LAST_REC'
       MaxValue = 1
+    end
+    object mem_zatraPrepKSM_ID: TIntegerField
+      FieldName = 'KSM_ID'
     end
   end
   object mem_prepItogi21: TkbmMemTable
@@ -4197,6 +4242,432 @@ object zatrViewDM: TzatrViewDM
     end
     object FloatField56: TFloatField
       FieldName = 'G20'
+    end
+  end
+  object q_zatra: TRxIBQuery
+    Database = dDM.db
+    Transaction = dDM.trans_read
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select document.doc_id, document.struk_id, document.klient_id ks' +
+        'm_id_prep,'
+      
+        'zK.ksm_id, cast(padleft(cast(zK.ksm_id as char(6)), 7, '#39'0'#39') as c' +
+        'har(7)) komatr,'
+      'zK.kei_id, zK.razdel_id, zK.account bal, matrop.nmat,'
+      'razdel.kodraz razd, razdel.kraz, razdel.namraz,'
+      
+        'zMoney.account, zMoney.ost_beg_money cena, zMoney.zagr_money cen' +
+        'aza,'
+      
+        'zMoney.ost_end_money, zK.ost_beg_nz ost_beg, zS.ost_beg_nz ost_b' +
+        'eg_s,'
+      
+        'zK.zagruz zagr, zS.zagruz zagr_s, zK.rashod rash, zS.rashod rash' +
+        '_s,'
+      
+        'zK.ost_end_nz ost_end, zS.ost_end_nz ost_end_s, zK.rashod_year r' +
+        'ash_god,'
+      
+        'zS.rashod_year rash_god_s, zK.rashod_quat rash_kv, zS.rashod_qua' +
+        't rash_kv_s,'
+      'zK.per_nz peredano,'
+      
+        'cast(iif((zS.ost_beg_nz + zS.zagruz - zS.rashod) <> zS.ost_end_n' +
+        'z,'
+      
+        '         zS.ost_end_nz - (zS.ost_beg_nz + zS.zagruz - zS.rashod)' +
+        ','
+      '         0) as numeric(18,6)) otklon,'
+      
+        'spprod.kod_prod, spprod.nmat nmat_prep, configumc.stkod, configu' +
+        'mc.stname,'
+      
+        'vipNG.vip vipusk_year, vipKv.vip vipusk_quat, vipMes.vip vipusk,' +
+        ' edSyr.neis ediz'
+      'from document'
+      'inner join zatr_otchet zK on zK.doc_id = document.doc_id'
+      'left join document docS on docS.struk_id = document.struk_id'
+      '                        and docS.tip_op_id = document.tip_op_id'
+      '                        and docS.tip_dok_id = 239'
+      '                        and docS.klient_id = document.klient_id'
+      '                        and docS.date_op = document.date_op'
+      'left join zatr_otchet zS on zS.doc_id = docS.doc_id'
+      '                         and zS.ksm_id = zK.ksm_id'
+      '                         and zS.kei_id = zK.kei_id'
+      '                         and zS.razdel_id = zK.razdel_id'
+      
+        'left join zatr_money zMoney on zMoney.struk_id = document.struk_' +
+        'id'
+      
+        '                            and zMoney.ksm_idpr = document.klien' +
+        't_id'
+      
+        '                            and zMoney.mes = extractmonth(cast(:' +
+        'date_begin_mes as date))'
+      
+        '                            and zMoney.god = extractyear(cast(:d' +
+        'ate_begin_mes as date))'
+      '                            and zMoney.ksm_id = zK.ksm_id'
+      '                            and zMoney.kei_id = zK.kei_id'
+      '                            and zMoney.razdel_id = zK.razdel_id'
+      'left join razdel on razdel.razdel_id = zK.razdel_id'
+      'left join spprod on spprod.ksm_id = document.klient_id'
+      'left join configumc on configumc.struk_id = document.struk_id'
+      'left join (SELECT  sum(KARTv.KOL_PRIH) vip, kartv.ksm_id'
+      '            FROM KARTv'
+      
+        '            INNER JOIN DOCUMENT ON (KARTv.DOC_ID = DOCUMENT.DOC_' +
+        'ID)'
+      '            WHERE DOCUMENT.STRUK_ID = :struk_id'
+      
+        '            AND DOCUMENT.TIP_OP_ID = 36 and document.tip_dok_id ' +
+        '= 74'
+      
+        '            AND Document.Date_op between :date_begin_god and :da' +
+        'te_end'
+      
+        '            group by kartv.ksm_id) vipNG on vipNG.ksm_id = sppro' +
+        'd.ksm_id'
+      'left join (SELECT  sum(KARTv.KOL_PRIH) vip, kartv.ksm_id'
+      '            FROM KARTv'
+      
+        '            INNER JOIN DOCUMENT ON (KARTv.DOC_ID = DOCUMENT.DOC_' +
+        'ID)'
+      '            WHERE DOCUMENT.STRUK_ID = :struk_id'
+      
+        '            AND DOCUMENT.TIP_OP_ID = 36 and document.tip_dok_id ' +
+        '= 74'
+      
+        '            AND Document.Date_op between :date_begin_kv and :dat' +
+        'e_end'
+      
+        '            group by kartv.ksm_id) vipKv on vipKv.ksm_id = sppro' +
+        'd.ksm_id'
+      'left join (SELECT  sum(KARTv.KOL_PRIH) vip, kartv.ksm_id'
+      '            FROM KARTv'
+      
+        '            INNER JOIN DOCUMENT ON (KARTv.DOC_ID = DOCUMENT.DOC_' +
+        'ID)'
+      '            WHERE DOCUMENT.STRUK_ID = :struk_id'
+      
+        '            AND DOCUMENT.TIP_OP_ID = 36 and document.tip_dok_id ' +
+        '= 74'
+      
+        '            AND Document.Date_op between :date_begin_mes and :da' +
+        'te_end'
+      
+        '            group by kartv.ksm_id) vipMes on vipMes.ksm_id = spp' +
+        'rod.ksm_id'
+      'left join ediz on ediz.kei_id = spprod.kei_id'
+      'left join matrop on matrop.ksm_id = zK.ksm_id'
+      'left join ediz edSyr on edSyr.kei_id = zK.kei_id'
+      ''
+      'where document.struk_id = :struk_id'
+      'and document.klient_id = :ksm_idpr'
+      'and document.tip_dok_id = 238'
+      'and document.date_op between :date_begin_mes and :date_end'
+      'order by razdel.kodraz, matrop.nmat')
+    Macros = <>
+    Left = 96
+    Top = 312
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'date_begin_mes'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_begin_mes'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'struk_id'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_begin_god'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_end'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'struk_id'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_begin_kv'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_end'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'struk_id'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_begin_mes'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_end'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'struk_id'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'ksm_idpr'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_begin_mes'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_end'
+        ParamType = ptUnknown
+      end>
+    object q_zatraDOC_ID: TIntegerField
+      FieldName = 'DOC_ID'
+      Origin = '"DOCUMENT"."DOC_ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object q_zatraSTRUK_ID: TSmallintField
+      FieldName = 'STRUK_ID'
+      Origin = '"DOCUMENT"."STRUK_ID"'
+      Required = True
+    end
+    object q_zatraKSM_ID_PREP: TIntegerField
+      FieldName = 'KSM_ID_PREP'
+      Origin = '"DOCUMENT"."KLIENT_ID"'
+      Required = True
+    end
+    object q_zatraKSM_ID: TIntegerField
+      FieldName = 'KSM_ID'
+      Origin = '"ZATR_OTCHET"."KSM_ID"'
+    end
+    object q_zatraKOMATR: TIBStringField
+      FieldName = 'KOMATR'
+      ProviderFlags = []
+      ReadOnly = True
+      FixedChar = True
+      Size = 7
+    end
+    object q_zatraKEI_ID: TIntegerField
+      FieldName = 'KEI_ID'
+      Origin = '"ZATR_OTCHET"."KEI_ID"'
+    end
+    object q_zatraRAZDEL_ID: TIntegerField
+      FieldName = 'RAZDEL_ID'
+      Origin = '"ZATR_OTCHET"."RAZDEL_ID"'
+    end
+    object q_zatraBAL: TIBStringField
+      FieldName = 'BAL'
+      Origin = '"ZATR_OTCHET"."ACCOUNT"'
+      FixedChar = True
+      Size = 5
+    end
+    object q_zatraNMAT: TIBStringField
+      FieldName = 'NMAT'
+      Origin = '"MATROP"."NMAT"'
+      Size = 60
+    end
+    object q_zatraRAZD: TIBStringField
+      FieldName = 'RAZD'
+      Origin = '"RAZDEL"."KODRAZ"'
+      FixedChar = True
+      Size = 2
+    end
+    object q_zatraKRAZ: TSmallintField
+      FieldName = 'KRAZ'
+      Origin = '"RAZDEL"."KRAZ"'
+    end
+    object q_zatraNAMRAZ: TIBStringField
+      FieldName = 'NAMRAZ'
+      Origin = '"RAZDEL"."NAMRAZ"'
+      Size = 60
+    end
+    object q_zatraACCOUNT: TIBStringField
+      FieldName = 'ACCOUNT'
+      Origin = '"ZATR_MONEY"."ACCOUNT"'
+      FixedChar = True
+      Size = 5
+    end
+    object q_zatraCENA: TFMTBCDField
+      FieldName = 'CENA'
+      Origin = '"ZATR_MONEY"."OST_BEG_MONEY"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraCENAZA: TFMTBCDField
+      FieldName = 'CENAZA'
+      Origin = '"ZATR_MONEY"."ZAGR_MONEY"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraOST_END_MONEY: TFMTBCDField
+      FieldName = 'OST_END_MONEY'
+      Origin = '"ZATR_MONEY"."OST_END_MONEY"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraOST_BEG: TFMTBCDField
+      FieldName = 'OST_BEG'
+      Origin = '"ZATR_OTCHET"."OST_BEG_NZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraOST_BEG_S: TFMTBCDField
+      FieldName = 'OST_BEG_S'
+      Origin = '"ZATR_OTCHET"."OST_BEG_NZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraZAGR: TFMTBCDField
+      FieldName = 'ZAGR'
+      Origin = '"ZATR_OTCHET"."ZAGRUZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraZAGR_S: TFMTBCDField
+      FieldName = 'ZAGR_S'
+      Origin = '"ZATR_OTCHET"."ZAGRUZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraRASH: TFMTBCDField
+      FieldName = 'RASH'
+      Origin = '"ZATR_OTCHET"."RASHOD"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraRASH_S: TFMTBCDField
+      FieldName = 'RASH_S'
+      Origin = '"ZATR_OTCHET"."RASHOD"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraOST_END: TFMTBCDField
+      FieldName = 'OST_END'
+      Origin = '"ZATR_OTCHET"."OST_END_NZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraOST_END_S: TFMTBCDField
+      FieldName = 'OST_END_S'
+      Origin = '"ZATR_OTCHET"."OST_END_NZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraRASH_GOD: TFMTBCDField
+      FieldName = 'RASH_GOD'
+      Origin = '"ZATR_OTCHET"."RASHOD_YEAR"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraRASH_GOD_S: TFMTBCDField
+      FieldName = 'RASH_GOD_S'
+      Origin = '"ZATR_OTCHET"."RASHOD_YEAR"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraRASH_KV: TFMTBCDField
+      FieldName = 'RASH_KV'
+      Origin = '"ZATR_OTCHET"."RASHOD_QUAT"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraRASH_KV_S: TFMTBCDField
+      FieldName = 'RASH_KV_S'
+      Origin = '"ZATR_OTCHET"."RASHOD_QUAT"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraPEREDANO: TFMTBCDField
+      FieldName = 'PEREDANO'
+      Origin = '"ZATR_OTCHET"."PER_NZ"'
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraOTKLON: TFMTBCDField
+      FieldName = 'OTKLON'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraKOD_PROD: TIBStringField
+      FieldKind = fkInternalCalc
+      FieldName = 'KOD_PROD'
+      Origin = '"SPPROD"."KOD_PROD"'
+      ProviderFlags = []
+      ReadOnly = True
+      FixedChar = True
+      Size = 18
+    end
+    object q_zatraNMAT_PREP: TIBStringField
+      FieldName = 'NMAT_PREP'
+      Origin = '"SPPROD"."NMAT"'
+      Size = 60
+    end
+    object q_zatraSTKOD: TIBStringField
+      FieldName = 'STKOD'
+      Origin = '"CONFIGUMC"."STKOD"'
+      FixedChar = True
+      Size = 4
+    end
+    object q_zatraSTNAME: TIBStringField
+      FieldName = 'STNAME'
+      Origin = '"CONFIGUMC"."STNAME"'
+      FixedChar = True
+    end
+    object q_zatraVIPUSK_YEAR: TFMTBCDField
+      FieldName = 'VIPUSK_YEAR'
+      ProviderFlags = []
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraVIPUSK_QUAT: TFMTBCDField
+      FieldName = 'VIPUSK_QUAT'
+      ProviderFlags = []
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraVIPUSK: TFMTBCDField
+      FieldName = 'VIPUSK'
+      ProviderFlags = []
+      Precision = 18
+      Size = 6
+    end
+    object q_zatraEDIZ: TIBStringField
+      FieldName = 'EDIZ'
+      Origin = '"EDIZ"."NEIS"'
+      FixedChar = True
+      Size = 10
     end
   end
 end

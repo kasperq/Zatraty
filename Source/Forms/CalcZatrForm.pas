@@ -14,10 +14,6 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     grid_vipusk: TDBGridEh;
-    Panel3: TPanel;
-    Splitter1: TSplitter;
-    grid_departments: TDBGridEh;
-    ds_departments: TDataSource;
     ds_vipusk: TDataSource;
     pc_zatraty: TPageControl;
     vipuskPage: TTabSheet;
@@ -26,10 +22,7 @@ type
     ds_zatra: TDataSource;
     btn_showCurZatr: TBitBtn;
     btn_calcZatr: TBitBtn;
-    btn_printCurZatra: TBitBtn;
     btn_printChecked: TBitBtn;
-    btn_deselectAll: TBitBtn;
-    btn_selectAll: TBitBtn;
     Panel4: TPanel;
     Panel5: TPanel;
     DBGridEh1: TDBGridEh;
@@ -39,9 +32,8 @@ type
     menu_print: TPopupMenu;
     N11: TMenuItem;
     N21: TMenuItem;
-    menu_printCur: TPopupMenu;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
+    Panel3: TPanel;
+    cb_selectAll: TCheckBox;
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btn_showCurZatrClick(Sender: TObject);
@@ -49,15 +41,12 @@ type
     procedure grid_zatraDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumnEh; State: TGridDrawState);
     procedure grid_vipuskDblClick(Sender: TObject);
-    procedure btn_deselectAllClick(Sender: TObject);
-    procedure btn_selectAllClick(Sender: TObject);
     procedure btn_viewCheckedClick(Sender: TObject);
     procedure N11Click(Sender: TObject);
     procedure N21Click(Sender: TObject);
-    procedure MenuItem1Click(Sender: TObject);
-    procedure MenuItem2Click(Sender: TObject);
     procedure btn_printCheckedClick(Sender: TObject);
-    procedure btn_printCurZatraClick(Sender: TObject);
+    procedure btn_calcZatrClick(Sender: TObject);
+    procedure cb_selectAllClick(Sender: TObject);
   private
     m_sets : TSettings;
 //    cenPf : TCenaPf;
@@ -83,24 +72,14 @@ implementation
 
 {$R *.dfm}
 
-procedure TFCalcZatrForm.btn_deselectAllClick(Sender: TObject);
+procedure TFCalcZatrForm.btn_calcZatrClick(Sender: TObject);
 begin
-  zatrContr.vipListSetChecked(0);
+  zatrContr.calcZatras;
 end;
 
 procedure TFCalcZatrForm.btn_printCheckedClick(Sender: TObject);
 begin
   menu_print.Popup(Mouse.CursorPos.x,Mouse.CursorPos.y);
-end;
-
-procedure TFCalcZatrForm.btn_printCurZatraClick(Sender: TObject);
-begin
-  menu_printCur.Popup(Mouse.CursorPos.x,Mouse.CursorPos.y);
-end;
-
-procedure TFCalcZatrForm.btn_selectAllClick(Sender: TObject);
-begin
-  zatrContr.vipListSetChecked(1);
 end;
 
 procedure TFCalcZatrForm.btn_showCurZatrClick(Sender: TObject);
@@ -113,6 +92,11 @@ begin
   zatrContr.viewCheckedPrep;
   pc_zatraty.ActivePage := viewPage;
   ds_zatra.DataSet := zatrContr.zatrMaterials;
+end;
+
+procedure TFCalcZatrForm.cb_selectAllClick(Sender: TObject);
+begin
+  zatrContr.vipListSetChecked(cb_selectAll.Checked);
 end;
 
 procedure TFCalcZatrForm.createAndInitZatrController;
@@ -144,6 +128,8 @@ end;
 
 procedure TFCalcZatrForm.grid_vipuskDblClick(Sender: TObject);
 begin
+  zatrContr.checkVipuskRecord;
+
   pc_zatraty.ActivePage := viewPage;
   zatrContr.loadCurrentPrep;
   ds_zatra.DataSet := zatrContr.zatrMaterials;
@@ -173,19 +159,8 @@ end;
 procedure TFCalcZatrForm.loadCalcForm;
 begin
   createAndInitZatrController;
-  zatrContr.loadDepartmentsAndVipusk;
-  ds_departments.DataSet := zatrContr.strukList;
+  zatrContr.loadVipusk;
   ds_vipusk.DataSet := zatrContr.vipuskList;
-end;
-
-procedure TFCalcZatrForm.MenuItem1Click(Sender: TObject);
-begin
-  zatrContr.printCurrentPrep(1);
-end;
-
-procedure TFCalcZatrForm.MenuItem2Click(Sender: TObject);
-begin
-  zatrContr.printCurrentPrep(2);
 end;
 
 procedure TFCalcZatrForm.N11Click(Sender: TObject);

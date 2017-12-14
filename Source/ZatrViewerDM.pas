@@ -223,21 +223,65 @@ type
     FloatField54: TFloatField;
     FloatField55: TFloatField;
     FloatField56: TFloatField;
+    q_zatra: TRxIBQuery;
+    mem_zatraKSM_ID: TIntegerField;
+    mem_zatraPrepKSM_ID: TIntegerField;
+    q_zatraDOC_ID: TIntegerField;
+    q_zatraSTRUK_ID: TSmallintField;
+    q_zatraKSM_ID_PREP: TIntegerField;
+    q_zatraKSM_ID: TIntegerField;
+    q_zatraKOMATR: TIBStringField;
+    q_zatraKEI_ID: TIntegerField;
+    q_zatraRAZDEL_ID: TIntegerField;
+    q_zatraBAL: TIBStringField;
+    q_zatraNMAT: TIBStringField;
+    q_zatraRAZD: TIBStringField;
+    q_zatraKRAZ: TSmallintField;
+    q_zatraNAMRAZ: TIBStringField;
+    q_zatraACCOUNT: TIBStringField;
+    q_zatraCENA: TFMTBCDField;
+    q_zatraCENAZA: TFMTBCDField;
+    q_zatraOST_END_MONEY: TFMTBCDField;
+    q_zatraOST_BEG: TFMTBCDField;
+    q_zatraOST_BEG_S: TFMTBCDField;
+    q_zatraZAGR: TFMTBCDField;
+    q_zatraZAGR_S: TFMTBCDField;
+    q_zatraRASH: TFMTBCDField;
+    q_zatraRASH_S: TFMTBCDField;
+    q_zatraOST_END: TFMTBCDField;
+    q_zatraOST_END_S: TFMTBCDField;
+    q_zatraRASH_GOD: TFMTBCDField;
+    q_zatraRASH_GOD_S: TFMTBCDField;
+    q_zatraRASH_KV: TFMTBCDField;
+    q_zatraRASH_KV_S: TFMTBCDField;
+    q_zatraPEREDANO: TFMTBCDField;
+    q_zatraOTKLON: TFMTBCDField;
+    q_zatraKOD_PROD: TIBStringField;
+    q_zatraNMAT_PREP: TIBStringField;
+    q_zatraSTKOD: TIBStringField;
+    q_zatraSTNAME: TIBStringField;
+    q_zatraVIPUSK_YEAR: TFMTBCDField;
+    q_zatraVIPUSK_QUAT: TFMTBCDField;
+    q_zatraVIPUSK: TFMTBCDField;
+    q_zatraEDIZ: TIBStringField;
     procedure q_zatraSpprodCalcFields(DataSet: TDataSet);
     procedure frxReport1GetValue(const VarName: string; var Value: Variant);
     procedure DataModuleDestroy(Sender: TObject);
   private
     curKsmId : integer;
-    m_reportsCount : integer;
+//    m_reportsCount : integer;
 
   public
     procedure prepare;
-    procedure loadZatra(month, year : integer; stkod, koprep, machine, driveLetter: string);
+    procedure loadZatra(strukId, ksmIdPrep : integer; dateBeginMonth,
+                        dateEndMonth, dateBeginQuat, dateBeginYear : TDate);
+
+    procedure loadZatraDbf(month, year : integer; stkod, koprep, machine, driveLetter: string);
     procedure loadZatraItogi(month, year : integer; stkod, koprep, machine, driveLetter: string);
     procedure openZatraSpprod(ksmId, strukId : integer; dateBeginMonth,
                               dateBeginYear, dateBeginQuat, dateEnd : TDate);
 
-    property reportsCount : integer read m_reportsCount write m_reportsCount;
+//    property reportsCount : integer read m_reportsCount write m_reportsCount;
 
   end;
 
@@ -266,13 +310,44 @@ begin
       Value := 2;
     curKsmId := mem_zatraKSM_ID_PREP.AsInteger;
   end;
-  if (VarName = 'reportsCount') then
+//  if (VarName = 'reportsCount') then
+//  begin
+//    Value := m_reportsCount;
+//  end;
+end;
+
+procedure TzatrViewDM.loadZatra(strukId, ksmIdPrep : integer; dateBeginMonth,
+                                dateEndMonth, dateBeginQuat, dateBeginYear : TDate);
+begin
+  q_zatra.Close;
+  q_zatra.ParamByName('STRUK_ID').AsInteger := strukId;
+  q_zatra.ParamByName('KSM_IDPR').AsInteger := ksmIdPrep;
+  q_zatra.ParamByName('DATE_BEGIN_MES').AsDate := dateBeginMonth;
+  q_zatra.ParamByName('DATE_END').AsDate := dateEndMonth;
+  q_zatra.ParamByName('DATE_BEGIN_GOD').AsDate := dateBeginYear;
+  q_zatra.ParamByName('DATE_BEGIN_KV').AsDate := dateBeginQuat;
+  q_zatra.Open;
+
+  mem_zatraPrep.Close;
+  mem_zatraPrep.EmptyTable;
+  mem_zatraPrep.LoadFromDataSet(q_zatra, [mtcpoAppend]);
+  mem_zatraPrep.Open;
+
+  mem_zatraPrep.Last;
+  while (mem_zatraPrep.RecNo <> 1) do
   begin
-    Value := m_reportsCount;
+    if (mem_zatraPrep.FieldByName('NMAT').AsString <> 'ÿÿÿ') then
+    begin
+      mem_zatraPrep.Edit;
+      mem_zatraPrep.FieldByName('LAST_REC').AsInteger := 1;
+      mem_zatraPrep.Post;
+      break;
+    end;
+    mem_zatraPrep.Prior;
   end;
 end;
 
-procedure TzatrViewDM.loadZatra(month, year : integer; stkod, koprep, machine, driveLetter: string);
+procedure TzatrViewDM.loadZatraDbf(month, year : integer; stkod, koprep, machine, driveLetter: string);
 begin
   q_zatraDbf.Close;
   q_zatraDbf.EhSQL.Text := 'select zatra.razd, zatra.bal, zatra.komatr, zatra.nmat, '

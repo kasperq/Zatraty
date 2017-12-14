@@ -42,7 +42,13 @@ uses
   MoneyCopierDM in 'Source\MoneyCopierDM.pas' {FMoneyCopierDM: TDataModule},
   MoneyZatr in 'Source\MoneyZatr.pas',
   MoneyZatrDM in 'Source\MoneyZatrDM.pas' {FMoneyZatrDM: TDataModule},
-  MoneyTypes in 'Source\MoneyTypes.pas';
+  MoneyTypes in 'Source\MoneyTypes.pas',
+  ZatrUtils in 'Source\ZatrUtils.pas',
+  ZatrCalcReport in 'Source\ZatrCalcReport.pas',
+  StartForm in 'Source\Forms\StartForm.pas' {FStartForm},
+  StartController in 'Source\StartController.pas',
+  DbfCopier in 'Source\DbfCopier.pas',
+  DbfCopierDM in 'Source\DbfCopierDM.pas' {dbfCopyDM: TDataModule};
 
 {$R *.res}
 //var

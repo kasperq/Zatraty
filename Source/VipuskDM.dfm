@@ -15,15 +15,21 @@ object vipDM: TvipDM
         'select kartv.ksm_id, kartv.kol_prih, spprod.nmat, spprod.kod_pro' +
         'd, ediz.neis,'
       'spprod.sprod_id, cast(0 as integer) checked,'
-      'iif(coalesce(docZ.doc_id,0) > 0, 1, 0) copied'
+      'iif(coalesce(docOt.doc_id,0) > 0, 1, 0) copied,'
+      'iif(coalesce(docZ.doc_id,0) > 0, 1, 0) calculated,'
+      'spprod.spprn'
       'from kartv'
       'inner join document on document.doc_id = kartv.doc_id'
       'left join spprod on spprod.ksm_id = kartv.ksm_id'
       'left join ediz on ediz.kei_id = spprod.kei_id'
+      'left join document docOt on docOt.klient_id = kartv.ksm_id'
+      '                    and docOt.date_op between :date1 and :date2'
+      '                    and docOt.tip_op_id = 163'
+      '                    and docOt.tip_dok_id = 237'
       'left join document docZ on docZ.klient_id = kartv.ksm_id'
       '                    and docZ.date_op between :date1 and :date2'
       '                    and docZ.tip_op_id = 163'
-      '                    and docZ.tip_dok_id = 237'
+      '                    and docZ.tip_dok_id = 238'
       'where document.tip_op_id = 36 and document.tip_dok_id = 74'
       'and document.struk_id = :struk_id'
       'and document.klient_id = :struk_id'
@@ -34,6 +40,16 @@ object vipDM: TvipDM
     Left = 48
     Top = 32
     ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'date1'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date2'
+        ParamType = ptUnknown
+      end
       item
         DataType = ftUnknown
         Name = 'date1'
@@ -111,6 +127,15 @@ object vipDM: TvipDM
       FieldName = 'COPIED'
       ProviderFlags = []
       ReadOnly = True
+    end
+    object q_vipuskCALCULATED: TIntegerField
+      FieldName = 'CALCULATED'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object q_vipuskSPPRN: TSmallintField
+      FieldName = 'SPPRN'
+      Origin = '"SPPROD"."SPPRN"'
     end
   end
   object upd_vipusk: TIBUpdateSQLW

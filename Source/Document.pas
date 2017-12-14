@@ -20,6 +20,7 @@ type
     function createDocument(strukId, klientId, tipOpId, tipDokId : integer;
                             dateDok, dateOp : TDate; ndok : string) : boolean;
     function saveDocument() : boolean;
+    function deleteDocument() : boolean;
 
     function getCurrentDocId() : integer;
 
@@ -56,6 +57,12 @@ begin
   dm.tipOpId := tipOpId;
   dm.tipDokId := tipDokId;
   dm.q_document.Append;
+end;
+
+function TDocument.deleteDocument: boolean;
+begin
+  if (dm.q_document.Active) then
+    dm.q_document.Delete;
 end;
 
 destructor TDocument.Destroy;

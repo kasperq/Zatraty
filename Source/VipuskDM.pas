@@ -19,6 +19,8 @@ type
     upd_vipusk: TIBUpdateSQLW;
     mem_checkedVipusk: TkbmMemTable;
     q_vipuskCOPIED: TIntegerField;
+    q_vipuskCALCULATED: TIntegerField;
+    q_vipuskSPPRN: TSmallintField;
     procedure q_vipuskAfterScroll(DataSet: TDataSet);
     procedure DataModuleDestroy(Sender: TObject);
     procedure q_vipuskCHECKEDChange(Sender: TField);
@@ -57,6 +59,7 @@ begin
   m_sets.drug.sprodId := q_vipuskSPROD_ID.AsInteger;
   m_sets.drug.nmat := q_vipuskNMAT.AsString;
   m_sets.drug.kodProd := q_vipuskKOD_PROD.AsString;
+  m_sets.drug.setPf(q_vipuskSPPRN.AsInteger);
 end;
 
 procedure TvipDM.q_vipuskCHECKEDChange(Sender: TField);

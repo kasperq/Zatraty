@@ -20,6 +20,7 @@ type
     procedure setSets(var value : TSettings);
     procedure setDB(var db : TdDM);
     procedure loadVipusk;
+    procedure checkVipuskRecord;
 
     procedure copyReports({reportList : TkbmMemTable});
     procedure selectAllPreps(select : boolean);
@@ -30,6 +31,11 @@ type
 implementation
 
 { TPrReportController }
+
+procedure TPrReportController.checkVipuskRecord;
+begin
+  vip.checkCurrentRecord;
+end;
 
 procedure TPrReportController.copyReports({reportList : TkbmMemTable});
 var

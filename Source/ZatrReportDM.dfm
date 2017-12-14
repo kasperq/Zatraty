@@ -50,12 +50,6 @@ object FZatrReportDM: TFZatrReportDM
       FieldName = 'PARENT'
       Origin = '"ZATR_OTCHET"."PARENT"'
     end
-    object q_zatrReportACCOUNT: TIBStringField
-      FieldName = 'ACCOUNT'
-      Origin = '"ZATR_OTCHET"."ACCOUNT"'
-      FixedChar = True
-      Size = 6
-    end
     object q_zatrReportACTIVE_DOPR: TIntegerField
       FieldName = 'ACTIVE_DOPR'
       Origin = '"ZATR_OTCHET"."ACTIVE_DOPR"'
@@ -148,6 +142,12 @@ object FZatrReportDM: TFZatrReportDM
       Precision = 18
       Size = 6
     end
+    object q_zatrReportACCOUNT: TIBStringField
+      FieldName = 'ACCOUNT'
+      Origin = '"ZATR_OTCHET"."ACCOUNT"'
+      FixedChar = True
+      Size = 5
+    end
   end
   object upd_zatrReport: TIBUpdateSQLW
     RefreshSQL.Strings = (
@@ -218,5 +218,194 @@ object FZatrReportDM: TFZatrReportDM
     StoredProcName = 'ADD_ZATR_OTCHET'
     Left = 96
     Top = 160
+  end
+  object q_prevZatrDoc: TRxIBQuery
+    Database = dDM.db
+    Transaction = dDM.trans_read
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select extractyear(cast(max(document.date_op) as date)) god,'
+      'extractmonth(cast(max(document.date_op) as date)) mes,'
+      'document.struk_id, document.klient_id, document.doc_id'
+      'from document'
+      
+        'where document.tip_op_id = 163 and document.tip_dok_id = :tip_do' +
+        'k_id'
+      'and document.date_op < :date_op'
+      'and document.klient_id = :ksm_idpr'
+      'and document.struk_id = :struk_id'
+      'group by document.struk_id, document.klient_id, document.doc_id')
+    Macros = <>
+    Left = 256
+    Top = 40
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'tip_dok_id'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_op'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'ksm_idpr'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'struk_id'
+        ParamType = ptUnknown
+      end>
+    object q_prevZatrDocGOD: TIntegerField
+      FieldName = 'GOD'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object q_prevZatrDocMES: TIntegerField
+      FieldName = 'MES'
+      ProviderFlags = []
+      ReadOnly = True
+    end
+    object q_prevZatrDocSTRUK_ID: TSmallintField
+      FieldName = 'STRUK_ID'
+      Origin = '"DOCUMENT"."STRUK_ID"'
+      Required = True
+    end
+    object q_prevZatrDocKLIENT_ID: TIntegerField
+      FieldName = 'KLIENT_ID'
+      Origin = '"DOCUMENT"."KLIENT_ID"'
+      Required = True
+    end
+    object q_prevZatrDocDOC_ID: TIntegerField
+      FieldName = 'DOC_ID'
+      Origin = '"DOCUMENT"."DOC_ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+  end
+  object q_zatrReportPeriod: TRxIBQuery
+    Database = dDM.db
+    Transaction = dDM.trans_read
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      
+        'select zatr_otchet.ksm_id, zatr_otchet.kei_id, zatr_otchet.razde' +
+        'l_id,'
+      
+        'sum(zatr_otchet.ost_beg_s) ost_beg_s, sum(zatr_otchet.ost_beg_nz' +
+        ') ost_beg_nz,'
+      'sum(zatr_otchet.prihod) prihod, sum(zatr_otchet.zagruz) zagruz,'
+      
+        'sum(zatr_otchet.rashod) rashod, sum(zatr_otchet.ost_end_s) ost_e' +
+        'nd_s,'
+      'sum(zatr_otchet.ost_end_nz) ost_end_nz'
+      'from document'
+      'inner join zatr_otchet on zatr_otchet.doc_id = document.doc_id'
+      'where document.date_op between :date_begin and :date_end'
+      'and document.struk_id = :struk_id'
+      'and document.klient_id = :ksm_idpr'
+      'and document.tip_op_id = 163'
+      'and document.tip_dok_id = :tip_dok_id'
+      
+        'group by zatr_otchet.ksm_id, zatr_otchet.kei_id, zatr_otchet.raz' +
+        'del_id'
+      'order by zatr_otchet.razdel_id, zatr_otchet.ksm_id')
+    Macros = <>
+    Left = 256
+    Top = 112
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'date_begin'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'date_end'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'struk_id'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'ksm_idpr'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'tip_dok_id'
+        ParamType = ptUnknown
+      end>
+    object q_zatrReportPeriodKSM_ID: TIntegerField
+      FieldName = 'KSM_ID'
+      Origin = '"ZATR_OTCHET"."KSM_ID"'
+    end
+    object q_zatrReportPeriodKEI_ID: TIntegerField
+      FieldName = 'KEI_ID'
+      Origin = '"ZATR_OTCHET"."KEI_ID"'
+    end
+    object q_zatrReportPeriodRAZDEL_ID: TIntegerField
+      FieldName = 'RAZDEL_ID'
+      Origin = '"ZATR_OTCHET"."RAZDEL_ID"'
+    end
+    object q_zatrReportPeriodOST_BEG_S: TFMTBCDField
+      FieldName = 'OST_BEG_S'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatrReportPeriodOST_BEG_NZ: TFMTBCDField
+      FieldName = 'OST_BEG_NZ'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatrReportPeriodPRIHOD: TFMTBCDField
+      FieldName = 'PRIHOD'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatrReportPeriodZAGRUZ: TFMTBCDField
+      FieldName = 'ZAGRUZ'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatrReportPeriodRASHOD: TFMTBCDField
+      FieldName = 'RASHOD'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatrReportPeriodOST_END_S: TFMTBCDField
+      FieldName = 'OST_END_S'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
+    object q_zatrReportPeriodOST_END_NZ: TFMTBCDField
+      FieldName = 'OST_END_NZ'
+      ProviderFlags = []
+      ReadOnly = True
+      Precision = 18
+      Size = 6
+    end
   end
 end

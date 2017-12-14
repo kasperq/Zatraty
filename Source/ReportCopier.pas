@@ -2,7 +2,7 @@ unit ReportCopier;
 
 interface
 
-uses DBDM, Vipusk, Settings, ZatrReport, ReportCopierDM,
+uses DBDM, Vipusk, Settings, ZatrReport, ReportCopierDM, MoneyTypes,
   Forms, DateUtils;
 
 type
@@ -46,10 +46,10 @@ begin
   if (dm.q_otchet.RecordCount > 0) then
   begin
     if (report = nil) then
-      report := TZatrReport.Create(db);
+      report := TZatrReport.Create(db, TTipDok.report);
     if (report.findReport(strukId, ksmIdPrep, dateBegin, dateEnd)) then
     begin
-      report.openReport(strukId, ksmIdPrep, dateBegin, dateEnd);
+      report.openReport({strukId, ksmIdPrep, dateBegin, dateEnd});
       report.deleteReport();
       report.saveReport;
     end;
@@ -60,7 +60,7 @@ begin
                                 dm.q_otchetKSM_ID.AsInteger, dm.q_otchetKEI_ID.AsInteger,
                                 dm.q_otchetRAZDEL_ID.AsInteger, dm.q_otchetOSTATOK_BEGIN_S.AsFloat,
                                 dm.q_otchetOSTATOK_BEGIN_NZ.AsFloat, dm.q_otchetPRIX_PERIOD.AsFloat,
-                                dm.q_otchetZAG_PERIOD.AsFloat, dm.q_otchetRASX_PERIOD.AsFloat,
+                                dm.q_otchetZAG_PERIOD.AsFloat, dm.q_otchetRASH_VIRAB_PERIOD.AsFloat,
                                 dm.q_otchetPERS.AsFloat, dm.q_otchetPERNZ.AsFloat,
                                 dm.q_otchetOSTATOK_END_S.AsFloat, dm.q_otchetOSTATOK_END_NZ.AsFloat,
                                 dm.q_otchetRASH_GOD.AsFloat, dm.q_otchetRASH_KV.AsFloat,

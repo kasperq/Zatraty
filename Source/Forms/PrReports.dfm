@@ -120,6 +120,7 @@ object FPrReports: TFPrReports
             IndicatorOptions = [gioShowRowIndicatorEh, gioShowRecNoEh]
             OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghRowHighlight, dghDialogFind, dghShowRecNo, dghColumnResize, dghColumnMove]
             TabOrder = 0
+            OnDblClick = grid_vipuskDblClick
             Columns = <
               item
                 Checkboxes = True

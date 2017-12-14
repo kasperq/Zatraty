@@ -10,6 +10,7 @@ type
   private
     m_ksmId, m_sprodId : integer;
     m_nmat, m_kodProd, m_koprep : string;
+    m_pf : boolean;
 
   public
     Constructor Create; overload;
@@ -18,12 +19,14 @@ type
 
     procedure setKoprep(ksmId : string);
     procedure setKsmId(ksmId : integer);
+    procedure setPf(spprn : integer);
 
     property ksmId : integer read m_ksmId write setKsmId;
     property sprodId : integer read m_sprodId write m_sprodId;
     property nmat : string read m_nmat write m_nmat;
     property kodProd : string read m_kodProd write m_kodProd;
     property koprep : string read m_koprep write setKoprep;
+    property pf : boolean read m_pf write m_pf;
   end;
 
 implementation
@@ -59,6 +62,14 @@ procedure TDrug.setKsmId(ksmId: integer);
 begin
   self.m_ksmId := ksmId;
   self.koprep := IntToStr(ksmId);
+end;
+
+procedure TDrug.setPf(spprn: integer);
+begin
+  if (spprn = 2) or (spprn = 3) then
+    m_pf := true
+  else
+    m_pf := false;
 end;
 
 procedure TDrug.setKoprep(ksmId: string);

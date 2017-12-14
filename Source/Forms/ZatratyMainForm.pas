@@ -3,7 +3,7 @@ unit ZatratyMainForm;
 interface
 
 uses Settings, OpenedWnds, DBDM, Departments, CalcZatrForm, SvodParams,
-  SvodViewer, CenPF, PrReports, MoneyForm,
+  SvodViewer, CenPF, PrReports, MoneyForm, StartForm,
 
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, RxMenus, ExtCtrls, ComCtrls, StdCtrls, Spin, Buttons,
@@ -58,6 +58,7 @@ type
     tab_zatras: TTabSheet;
     tab_svod: TTabSheet;
     tab_cen: TTabSheet;
+    tab_start: TTabSheet;
     procedure N1Click(Sender: TObject);
     procedure SpinButton1UpClick(Sender: TObject);
     procedure SpinButton1DownClick(Sender: TObject);
@@ -87,12 +88,14 @@ type
     cenP : TCenPF;
     prReps : TFPrReports;
     moneyF : TFMoneyForm;
+    startF : TFStartForm;
 
     curBtn : TObject;
 
     procedure loadDepartments;
     procedure openPrReports;
     procedure openMoneyForm;
+    procedure openStartForm;
 
   public
 //
@@ -175,6 +178,17 @@ begin
   opened.pushBack('Отчеты', prReps);
 end;
 
+procedure TFZatratyMain.openStartForm;
+begin
+  if (startF = nil) then
+    startF := TFStartForm.Create(Application);
+  startF.setDB(db);
+  startF.setSets(sets);
+  startF.Parent := panel_main;
+  startF.Show;
+  opened.pushBack('Стартовый режим', startF);
+end;
+
 procedure TFZatratyMain.pc_menuChange(Sender: TObject);
 begin
   if (pc_menu.ActivePage = tab_reports) then
@@ -185,6 +199,8 @@ begin
     openMoneyForm;
   if (pc_menu.ActivePage = tab_svod) then
     menu_svod.Popup(Mouse.CursorPos.x,Mouse.CursorPos.y);
+  if (pc_menu.ActivePage = tab_start) then
+    openStartForm;
 end;
 
 procedure TFZatratyMain.openMoneyForm;

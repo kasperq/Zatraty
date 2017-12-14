@@ -28,7 +28,7 @@ object FCalcZatrForm: TFCalcZatrForm
     Align = alTop
     TabOrder = 0
     object btn_showCurZatr: TBitBtn
-      Left = 476
+      Left = 236
       Top = 1
       Width = 85
       Height = 47
@@ -38,79 +38,49 @@ object FCalcZatrForm: TFCalcZatrForm
       Visible = False
       WordWrap = True
       OnClick = btn_showCurZatrClick
+      ExplicitLeft = 476
     end
     object btn_calcZatr: TBitBtn
-      Left = 321
+      Left = 81
       Top = 1
       Width = 75
       Height = 47
       Align = alLeft
       Caption = #1056#1072#1089#1089#1095#1080#1090#1072#1090#1100' '#1079#1072#1090#1088#1072#1090#1099
       TabOrder = 1
-      Visible = False
       WordWrap = True
-    end
-    object btn_printCurZatra: TBitBtn
-      Left = 241
-      Top = 1
-      Width = 80
-      Height = 47
-      Align = alLeft
-      Caption = #1055#1077#1095#1072#1090#1100' '#1079#1072#1090#1088#1072#1090' '#1090#1077#1082#1091#1097#1077#1075#1086' '#1087#1088'.'
-      PopupMenu = menu_printCur
-      TabOrder = 2
-      WordWrap = True
-      OnClick = btn_printCurZatraClick
+      OnClick = btn_calcZatrClick
+      ExplicitLeft = 321
     end
     object btn_printChecked: TBitBtn
-      Left = 161
-      Top = 1
-      Width = 80
-      Height = 47
-      Align = alLeft
-      BiDiMode = bdLeftToRight
-      Caption = #1055#1077#1095#1072#1090#1100' '#1079#1072#1090#1088#1072#1090' '#1086#1090#1084#1077#1095#1077#1085#1085#1086#1075#1086' '#1087#1088#1077#1087'.'
-      Constraints.MaxWidth = 80
-      Layout = blGlyphTop
-      ParentBiDiMode = False
-      PopupMenu = menu_print
-      TabOrder = 3
-      WordWrap = True
-      OnClick = btn_printCheckedClick
-    end
-    object btn_deselectAll: TBitBtn
-      Left = 81
-      Top = 1
-      Width = 80
-      Height = 47
-      Align = alLeft
-      Caption = #1054#1090#1084#1077#1085#1080#1090#1100' '#1074#1099#1073#1086#1088
-      TabOrder = 4
-      WordWrap = True
-      OnClick = btn_deselectAllClick
-    end
-    object btn_selectAll: TBitBtn
       Left = 1
       Top = 1
       Width = 80
       Height = 47
       Align = alLeft
-      Caption = #1042#1099#1073#1088#1072#1090#1100' '#1074#1089#1077
-      TabOrder = 5
+      BiDiMode = bdLeftToRight
+      Caption = #1055#1077#1095#1072#1090#1100
+      Constraints.MaxWidth = 80
+      Layout = blGlyphTop
+      ParentBiDiMode = False
+      PopupMenu = menu_print
+      TabOrder = 2
       WordWrap = True
-      OnClick = btn_selectAllClick
+      OnClick = btn_printCheckedClick
+      ExplicitLeft = 161
     end
     object btn_viewChecked: TBitBtn
-      Left = 396
+      Left = 156
       Top = 1
       Width = 80
       Height = 47
       Align = alLeft
       Caption = #1055#1088#1086#1089#1084#1086#1090#1088' '#1074#1099#1073#1088#1072#1085#1085#1086#1075#1086
-      TabOrder = 6
+      TabOrder = 3
       Visible = False
       WordWrap = True
       OnClick = btn_viewCheckedClick
+      ExplicitLeft = 396
     end
   end
   object pc_zatraty: TPageControl
@@ -123,28 +93,21 @@ object FCalcZatrForm: TFCalcZatrForm
     TabOrder = 1
     object vipuskPage: TTabSheet
       Caption = #1057#1087#1080#1089#1086#1082' '#1087#1088#1077#1087#1072#1088#1072#1090#1086#1074
-      object Splitter1: TSplitter
-        Left = 185
-        Top = 0
-        Height = 612
-        ResizeStyle = rsUpdate
-        ExplicitLeft = 193
-        ExplicitTop = 24
-        ExplicitHeight = 596
-      end
       object Panel2: TPanel
-        Left = 188
-        Top = 0
-        Width = 826
-        Height = 612
+        Left = 0
+        Top = 25
+        Width = 1014
+        Height = 587
         Align = alClient
         Caption = 'Panel2'
         TabOrder = 0
+        ExplicitTop = 0
+        ExplicitHeight = 612
         object grid_vipusk: TDBGridEh
           Left = 1
           Top = 1
-          Width = 824
-          Height = 610
+          Width = 1012
+          Height = 585
           Align = alClient
           AutoFitColWidths = True
           DataSource = ds_vipusk
@@ -205,6 +168,17 @@ object FCalcZatrForm: TFCalcZatrForm
               EditButtons = <>
               FieldName = 'KSM_ID'
               Footers = <>
+            end
+            item
+              Checkboxes = True
+              DynProps = <>
+              EditButtons = <>
+              FieldName = 'CALCULATED'
+              Footers = <>
+              KeyList.Strings = (
+                '1'
+                '0')
+              Title.Caption = #1055#1086#1089#1095#1080#1090#1072#1085
             end>
           object RowDetailData: TRowDetailPanelControlEh
           end
@@ -213,53 +187,21 @@ object FCalcZatrForm: TFCalcZatrForm
       object Panel3: TPanel
         Left = 0
         Top = 0
-        Width = 185
-        Height = 612
-        Align = alLeft
-        Caption = 'Panel3'
+        Width = 1014
+        Height = 25
+        Align = alTop
         TabOrder = 1
-        object grid_departments: TDBGridEh
+        object cb_selectAll: TCheckBox
           Left = 1
           Top = 1
-          Width = 183
-          Height = 610
-          Align = alClient
-          AutoFitColWidths = True
-          DataSource = ds_departments
-          DynProps = <>
-          FooterParams.Color = clWindow
-          GridLineParams.VertEmptySpaceStyle = dessNonEh
-          IndicatorOptions = [gioShowRowIndicatorEh]
-          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
-          OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghRowHighlight, dghDialogFind, dghColumnResize, dghColumnMove]
+          Width = 152
+          Height = 23
+          Align = alLeft
+          Caption = #1042#1099#1073#1088#1072#1090#1100'/'#1086#1090#1084#1077#1085#1080#1090#1100' '#1074#1089#1077
           TabOrder = 0
-          Columns = <
-            item
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'STNAM'
-              Footers = <>
-              Title.Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
-            end
-            item
-              Checkboxes = True
-              DynProps = <>
-              EditButtons = <>
-              FieldName = 'VIB'
-              Footers = <>
-              KeyList.Strings = (
-                '1'
-                '0')
-              MaxWidth = 40
-              MinWidth = 40
-              PickList.Strings = (
-                '0'
-                '1')
-              Title.Caption = #1042#1099#1073#1086#1088
-              Width = 40
-            end>
-          object RowDetailData: TRowDetailPanelControlEh
-          end
+          OnClick = cb_selectAllClick
+          ExplicitLeft = 9
+          ExplicitTop = 2
         end
       end
     end
@@ -574,10 +516,6 @@ object FCalcZatrForm: TFCalcZatrForm
       end
     end
   end
-  object ds_departments: TDataSource
-    Left = 80
-    Top = 224
-  end
   object ds_vipusk: TDataSource
     DataSet = vipDM.q_vipusk
     Left = 432
@@ -602,18 +540,6 @@ object FCalcZatrForm: TFCalcZatrForm
     object N21: TMenuItem
       Caption = #1042#1072#1088#1080#1072#1085#1090' 2'
       OnClick = N21Click
-    end
-  end
-  object menu_printCur: TPopupMenu
-    Left = 272
-    Top = 40
-    object MenuItem1: TMenuItem
-      Caption = #1042#1072#1088#1080#1072#1085#1090' 1'
-      OnClick = MenuItem1Click
-    end
-    object MenuItem2: TMenuItem
-      Caption = #1042#1072#1088#1080#1072#1085#1090' 2'
-      OnClick = MenuItem2Click
     end
   end
 end

@@ -17,7 +17,6 @@ type
     q_zatrReportRAZDEL_ID: TIntegerField;
     q_zatrReportKEI_ID: TIntegerField;
     q_zatrReportPARENT: TIntegerField;
-    q_zatrReportACCOUNT: TIBStringField;
     q_zatrReportACTIVE_DOPR: TIntegerField;
     q_zatrReportOST_BEG_S: TFMTBCDField;
     q_zatrReportOST_BEG_NZ: TFMTBCDField;
@@ -34,14 +33,35 @@ type
     q_zatrReportUSER_NAME: TIBStringField;
     q_zatrReportRASHOD_YEAR: TFMTBCDField;
     q_zatrReportRASHOD_QUAT: TFMTBCDField;
+    q_prevZatrDoc: TRxIBQuery;
+    q_prevZatrDocGOD: TIntegerField;
+    q_prevZatrDocMES: TIntegerField;
+    q_prevZatrDocSTRUK_ID: TSmallintField;
+    q_prevZatrDocKLIENT_ID: TIntegerField;
+    q_zatrReportPeriod: TRxIBQuery;
+    q_zatrReportPeriodKSM_ID: TIntegerField;
+    q_zatrReportPeriodKEI_ID: TIntegerField;
+    q_zatrReportPeriodRAZDEL_ID: TIntegerField;
+    q_zatrReportPeriodOST_BEG_S: TFMTBCDField;
+    q_zatrReportPeriodOST_BEG_NZ: TFMTBCDField;
+    q_zatrReportPeriodPRIHOD: TFMTBCDField;
+    q_zatrReportPeriodZAGRUZ: TFMTBCDField;
+    q_zatrReportPeriodRASHOD: TFMTBCDField;
+    q_zatrReportPeriodOST_END_S: TFMTBCDField;
+    q_zatrReportPeriodOST_END_NZ: TFMTBCDField;
+    q_prevZatrDocDOC_ID: TIntegerField;
+    q_zatrReportACCOUNT: TIBStringField;
     procedure q_zatrReportBeforeInsert(DataSet: TDataSet);
   private
     { Private declarations }
   public
     newOtchetId : integer;
     curDocId : integer;
+    prevMonth, prevYear : integer;
 
     procedure openZatrReport(docId : integer);
+    procedure findPrevDoc(strukId, ksmIdPrep, tipDokId: integer; dateOp: TDate);
+    procedure openReportPeriod(strukId, ksmIdPrep, tipDokId: integer; dateBegin, dateEnd: TDate);
 
   end;
 
@@ -52,6 +72,18 @@ implementation
 {$R *.dfm}
 
 { TFZatrReportDM }
+
+procedure TFZatrReportDM.openReportPeriod(strukId, ksmIdPrep, tipDokId: integer;
+                                          dateBegin, dateEnd: TDate);
+begin
+  q_zatrReportPeriod.Close;
+  q_zatrReportPeriod.ParamByName('ksm_idpr').AsInteger := ksmIdPrep;
+  q_zatrReportPeriod.ParamByName('struk_id').AsInteger := strukId;
+  q_zatrReportPeriod.ParamByName('tip_dok_id').AsInteger := tipDokId;
+  q_zatrReportPeriod.ParamByName('date_begin').AsDate := dateBegin;
+  q_zatrReportPeriod.ParamByName('date_end').AsDate := dateEnd;
+  q_zatrReportPeriod.Open;
+end;
 
 procedure TFZatrReportDM.openZatrReport(docId: integer);
 begin
@@ -66,6 +98,21 @@ begin
   proc_addOtchetId.StoredProcName := 'ADD_ZATR_OTCHET';
   proc_addOtchetId.ExecProc;
   newOtchetId := proc_addOtchetId.Params.Items[0].AsInteger;
+end;
+
+procedure TFZatrReportDM.findPrevDoc(strukId, ksmIdPrep, tipDokId: integer; dateOp: TDate);
+begin
+  q_prevZatrDoc.Close;
+  q_prevZatrDoc.ParamByName('ksm_idpr').AsInteger := ksmIdPrep;
+  q_prevZatrDoc.ParamByName('struk_id').AsInteger := strukid;
+  q_prevZatrDoc.ParamByName('date_op').AsDate := dateOp;
+  q_prevZatrDoc.ParamByName('tip_dok_id').AsInteger := tipDokId;
+
+  q_prevZatrDoc.Open;
+  q_prevZatrDoc.First;
+  prevMonth := q_prevZatrDocMES.AsInteger;
+  prevYear := q_prevZatrDocGOD.AsInteger;
+  curDocId := q_prevZatrDocDOC_ID.AsInteger;
 end;
 
 end.

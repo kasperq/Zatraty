@@ -19,6 +19,7 @@ type
 
     procedure setSets(var value: TSettings);
     procedure selectAll(select : boolean);
+    procedure checkCurrentRecord;
 
     function openVipusk(strukId : integer; dateBegin, dateEnd : TDate) : boolean;
     function getVipusk() : TRxIBQuery;
@@ -37,6 +38,16 @@ begin
   dm := TvipDM.Create(Application);
   dm.q_vipusk.Database := db.db;
   dm.q_vipusk.Transaction := db.trans_read;
+end;
+
+procedure TVipusk.checkCurrentRecord;
+begin
+  vipuskList.Edit;
+  if (vipuskList.FieldByName('CHECKED').AsInteger = 1) then
+    vipuskList.FieldByName('CHECKED').AsInteger := 0
+  else
+    vipuskList.FieldByName('CHECKED').AsInteger := 1;
+  vipuskList.Post;
 end;
 
 constructor TVipusk.Create(var db: TdDM; var sets: TSettings);

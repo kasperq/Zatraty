@@ -27,6 +27,7 @@ type
     procedure btn_copyClick(Sender: TObject);
     procedure cb_selectAllClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure grid_vipuskDblClick(Sender: TObject);
   private
     repContr : TPrReportController;
     m_sets : TSettings;
@@ -70,6 +71,11 @@ end;
 function TFPrReports.getSets: TSettings;
 begin
   result := m_sets;
+end;
+
+procedure TFPrReports.grid_vipuskDblClick(Sender: TObject);
+begin
+  repContr.checkVipuskRecord;
 end;
 
 procedure TFPrReports.setDB(var db: TdDM);

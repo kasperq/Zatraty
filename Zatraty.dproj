@@ -607,6 +607,19 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Source\MoneyTypes.pas"/>
+        <DCCReference Include="Source\ZatrUtils.pas"/>
+        <DCCReference Include="Source\ZatrCalcReport.pas"/>
+        <DCCReference Include="Source\Forms\StartForm.pas">
+            <Form>FStartForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Source\StartController.pas"/>
+        <DCCReference Include="Source\DbfCopier.pas"/>
+        <DCCReference Include="Source\DbfCopierDM.pas">
+            <Form>dbfCopyDM</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

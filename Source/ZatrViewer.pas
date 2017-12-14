@@ -12,7 +12,7 @@ type
     m_sets : TSettings;
     dm : TzatrViewDM;
 
-    m_reportsCount : integer;
+//    m_reportsCount : integer;
 
     zRec101, zRec102, zRec104, zRec21, zRecSum10, zRecPrep101, zRecPrep102,
     zRecPrep104, zRecPrep21, zRecPrepSum10 : TZatrRecord;
@@ -21,6 +21,7 @@ type
     function getCurBal(var table : TkbmMemTable) : integer;
     procedure locateRecord(var table : TkbmMemTable; recNo : integer);
     procedure setSpprodAndRazdelToZatra(var table : TkbmMemTable);
+    procedure setRazdelToZatra(var table : TkbmMemTable);
     procedure addItogiToZatra;
     procedure createZatrRecord({var zRec : TZatrRecord});
 
@@ -39,7 +40,9 @@ type
     Destructor Destroy; override;
 
     procedure prepareLoading;
-    procedure loadZatrReport(month, year : integer; stkod, koprep : string);
+    procedure loadZatrReport(month, year : integer; stkod, koprep : string); overload;
+    procedure loadZatrReport(strukId, ksmIdPrep : integer; dateBeginMonth,
+                             dateEndMonth, dateBeginQuat, dateBeginYear : TDate); overload;
     procedure printReport(variantNum : integer);
 
     function getZatrMaterials() : TkbmMemTable;
@@ -244,21 +247,21 @@ begin
       curNamRaz := table.FieldByName('NAMRAZ').AsString;
     end;
 
-    if (table.FieldByName('BAL').AsString = '101') then
+    if (trim(table.FieldByName('BAL').AsString) = '10/1') then
     begin
       sumZatrRecordFields(table, zRec101, false);
       sumZatrRecordFields(table, zRecSum10, false);
       sumZatrRecordFields(table, zRecPrep101, true);
       sumZatrRecordFields(table, zRecPrepSum10, true);
     end;
-    if (table.FieldByName('BAL').AsString = '102') then
+    if (trim(table.FieldByName('BAL').AsString) = '10/2') then
     begin
       sumZatrRecordFields(table, zRec102, false);
       sumZatrRecordFields(table, zRecSum10, false);
       sumZatrRecordFields(table, zRecPrep102, true);
       sumZatrRecordFields(table, zRecPrepSum10, true);
     end;
-    if (table.FieldByName('BAL').AsString = '104') then
+    if (trim(table.FieldByName('BAL').AsString) = '10/4') then
     begin
       sumZatrRecordFields(table, zRec104, false);
       sumZatrRecordFields(table, zRecSum10, false);
@@ -405,8 +408,20 @@ end;
 
 procedure TZatrViewer.loadZatrReport(month, year : integer; stkod, koprep : string);
 begin
-  dm.loadZatra(month, year, stkod, koprep, m_sets.machine, m_sets.driveLetter);
+  dm.loadZatraDbf(month, year, stkod, koprep, m_sets.machine, m_sets.driveLetter);
   setSpprodAndRazdelToZatra(dm.mem_zatraPrep);
+  addItogiToZatra;
+  calcAndInsertZatraItogi(dm.mem_zatra);
+//  dm.mem_zatra.SortOn('KOD_PROD;IT_RAZD;IT_BAL;NMAT', []);
+end;
+
+procedure TZatrViewer.loadZatrReport(strukId, ksmIdPrep : integer;
+                                     dateBeginMonth, dateEndMonth, dateBeginQuat,
+                                     dateBeginYear : TDate);
+begin
+  dm.loadZatra(strukId, ksmIdPrep, dateBeginMonth, dateEndMonth, dateBeginQuat, dateBeginYear);
+//  setSpprodAndRazdelToZatra(dm.mem_zatraPrep);
+  setRazdelToZatra(dm.mem_zatraPrep);
   addItogiToZatra;
   calcAndInsertZatraItogi(dm.mem_zatra);
 //  dm.mem_zatra.SortOn('KOD_PROD;IT_RAZD;IT_BAL;NMAT', []);
@@ -415,7 +430,7 @@ end;
 procedure TZatrViewer.prepareLoading;
 begin
   dm.prepare;
-  m_reportsCount := 0;
+//  m_reportsCount := 0;
 end;
 
 procedure TZatrViewer.printReport(variantNum : integer);
@@ -429,6 +444,36 @@ begin
   dm.frxReport1.Script.Variables['operator_name'] := m_sets.operatorName;
   dm.frxReport1.Script.Variables['current_date'] := DateToStr(now);
   dm.frxReport1.ShowReport;
+end;
+
+procedure TZatrViewer.setRazdelToZatra(var table : TkbmMemTable);
+var
+  curRazd, curNmat : string;
+begin
+  dm.q_razdel.Close;
+  dm.q_razdel.Open;
+  table.DisableControls;
+  table.First;
+  while (not table.Eof) do
+  begin
+    curRazd := copy(table.FieldByName('RAZD').AsString, 1, 1) + '0';
+
+    if (dm.q_razdel.Locate('kraz', curRazd, [])) then
+    begin
+      table.Edit;
+      table.FieldByName('NAMRAZ').AsString := dm.q_razdelNAMRAZ.AsString;
+      table.Post;
+    end;
+
+    table.Edit;
+    table.FieldByName('IT_RAZD').AsInteger := StrToInt(curRazd);
+    table.FieldByName('IT_BAL').AsInteger := 80 + StrToInt(curRazd);
+    table.Post;
+
+    table.Next;
+  end;
+  dm.q_razdel.Close;
+  table.EnableControls;
 end;
 
 procedure TZatrViewer.setSpprodAndRazdelToZatra(var table : TkbmMemTable);
@@ -464,7 +509,7 @@ begin
         dm.openZatraSpprod(m_sets.drug.ksmId, m_sets.strukId, m_sets.dateBeginMonth,
                            m_sets.dateBeginYear, m_sets.dateBeginQuat, m_sets.dateEnd);
         dm.q_zatraSpprod.First;
-        m_reportsCount := m_reportsCount + 1;
+//        m_reportsCount := m_reportsCount + 1;
       end;
 
       table.Edit;
@@ -488,7 +533,7 @@ begin
   end;
 //  addItogiToZatra;
 //  calcZatraItogi(table);
-  dm.reportsCount := m_reportsCount;
+//  dm.reportsCount := m_reportsCount;
   dm.q_razdel.Close;
   table.EnableControls;
 end;
