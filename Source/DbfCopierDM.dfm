@@ -169,4 +169,36 @@ object dbfCopyDM: TdbfCopyDM
       FieldName = 'KSM_ID_S'
     end
   end
+  object q_struk: TRxIBQuery
+    Database = dDM.db
+    Transaction = dDM.trans_read
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'select configumc.struk_id, configumc.stkod'
+      'from configumc'
+      'where configumc.stkod = :stkod')
+    Macros = <>
+    Left = 160
+    Top = 40
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'stkod'
+        ParamType = ptUnknown
+      end>
+    object q_strukSTRUK_ID: TSmallintField
+      FieldName = 'STRUK_ID'
+      Origin = '"CONFIGUMC"."STRUK_ID"'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object q_strukSTKOD: TIBStringField
+      FieldName = 'STKOD'
+      Origin = '"CONFIGUMC"."STKOD"'
+      FixedChar = True
+      Size = 4
+    end
+  end
 end

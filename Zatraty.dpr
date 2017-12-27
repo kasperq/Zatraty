@@ -3,7 +3,7 @@ program Zatraty;
 uses
   Forms,
   SysUtils,
-  ZatratyMainForm in 'Source\Forms\ZatratyMainForm.pas' {FZatratyMain},
+  MainForm in 'Source\Forms\MainForm.pas' {FZatratyMain},
   Settings in 'Source\Settings.pas',
   Vcl.Themes,
   Vcl.Styles,

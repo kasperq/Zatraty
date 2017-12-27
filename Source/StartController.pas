@@ -18,18 +18,18 @@ type
     Constructor Create(var db : TdDM; var sets : TSettings); overload;
     Destructor Destroy; override;
 
-    procedure copyDbfZatrToDb(fileName : string);
+    procedure copyCurMonthDbfZatrToDbf(fileName : string);
   end;
 
 implementation
 
 { TStartController }
 
-procedure TStartController.copyDbfZatrToDb(fileName : string);
+procedure TStartController.copyCurMonthDbfZatrToDbf(fileName : string);
 begin
   if (dbfCopier = nil) then
     dbfCopier := TDbfCopier.Create(db, m_sets);
-  dbfCopier.copyDbfZatrToDb(fileName);
+  dbfCopier.copyCurMonthDbfZatrToDbf(fileName);
 end;
 
 constructor TStartController.Create(var db: TdDM; var sets: TSettings);

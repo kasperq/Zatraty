@@ -4,7 +4,8 @@ interface
 
 uses Settings, DBDM, StartController,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.Tabs, Vcl.StdCtrls;
 
 type
   TFStartForm = class(TForm)
@@ -12,11 +13,14 @@ type
     Panel2: TPanel;
     SpeedButton1: TSpeedButton;
     dlg_openZatr: TOpenDialog;
+    lbl_fileName: TLabel;
     procedure SpeedButton1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     m_sets : TSettings;
     db : TdDM;
     startContr : TStartController;
+    fileName : string;
 
   public
     procedure setSets(var value : TSettings);
@@ -29,6 +33,11 @@ implementation
 
 { TFStartForm }
 
+procedure TFStartForm.FormShow(Sender: TObject);
+begin
+  lbl_fileName.Caption := fileName;
+end;
+
 procedure TFStartForm.setDB(var db: TdDM);
 begin
   self.db := db;
@@ -40,16 +49,15 @@ begin
 end;
 
 procedure TFStartForm.SpeedButton1Click(Sender: TObject);
-var
-  fileName : string;
 begin
   dlg_openZatr.Execute();
   if (dlg_openZatr.Files.Capacity > 0) then
   begin
     fileName := dlg_openZatr.FileName;
+    lbl_fileName.Caption := fileName;
     if (startContr = nil) then
       startContr := TStartController.Create(db, m_sets);
-    startContr.copyDbfZatrToDb(fileName);
+    startContr.copyCurMonthDbfZatrToDbf(fileName);
   end;
 end;
 

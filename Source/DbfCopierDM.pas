@@ -2,8 +2,9 @@ unit DbfCopierDM;
 
 interface
 
-uses
-  System.SysUtils, System.Classes, Data.DB, Bde.DBTables, RxQuery, ERxQuery;
+uses DBDM,
+  System.SysUtils, System.Classes, Data.DB, Bde.DBTables, RxQuery, ERxQuery,
+  IBX.IBCustomDataSet, IBX.IBQuery, RxIBQuery;
 
 type
   TdbfCopyDM = class(TDataModule)
@@ -55,10 +56,14 @@ type
     q_zatraDbfKSM_ID: TFloatField;
     q_zatraDbfKOPREP_S: TStringField;
     q_zatraDbfKSM_ID_S: TFloatField;
+    q_struk: TRxIBQuery;
+    q_strukSTRUK_ID: TSmallintField;
+    q_strukSTKOD: TIBStringField;
   private
     { Private declarations }
   public
     procedure openZatraDbf(fileName : string);
+    function getStrukId(stkod : string) : integer;
 
   end;
 
@@ -69,6 +74,17 @@ implementation
 {$R *.dfm}
 
 { TdbfCopyDM }
+
+function TdbfCopyDM.getStrukId(stkod: string): integer;
+begin
+  result := 0;
+  q_struk.Close;
+  q_struk.ParamByName('stkod').AsString := stkod;
+  q_struk.Open;
+  q_struk.First;
+  if (q_struk.RecordCount > 0) then
+    result := q_strukSTRUK_ID.AsInteger;
+end;
 
 procedure TdbfCopyDM.openZatraDbf(fileName: string);
 begin

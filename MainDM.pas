@@ -3,7 +3,7 @@ unit MainDM;
 interface
 
 uses
-  DBDM, ZatratyMainForm,
+  DBDM, MainForm,
   System.SysUtils, System.Classes, UtilR, Forms;
 
 type

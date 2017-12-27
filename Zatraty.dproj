@@ -507,7 +507,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Source\Forms\ZatratyMainForm.pas">
+        <DCCReference Include="Source\Forms\MainForm.pas">
             <Form>FZatratyMain</Form>
         </DCCReference>
         <DCCReference Include="Source\Settings.pas"/>

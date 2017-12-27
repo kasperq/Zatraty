@@ -252,6 +252,10 @@ object FZatratyMain: TFZatratyMain
       object tab_svod: TTabSheet
         Caption = #1057#1074#1086#1076#1099
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object tab_cen: TTabSheet
         Caption = #1062#1077#1085#1099
@@ -264,7 +268,6 @@ object FZatratyMain: TFZatratyMain
       object tab_start: TTabSheet
         Caption = #1057#1090#1072#1088#1090#1086#1088#1074#1099#1081' '#1088#1077#1078#1080#1084
         ImageIndex = 4
-        ExplicitWidth = 940
       end
     end
   end

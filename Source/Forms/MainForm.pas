@@ -1,4 +1,4 @@
-unit ZatratyMainForm;
+unit MainForm;
 
 interface
 

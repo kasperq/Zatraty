@@ -28,12 +28,12 @@ type
     Constructor Create(var db : TdDM; var sets : TSettings); overload;
     Destructor Destroy; override;
 
-    procedure copyDbfZatrToDb(fileName : string);
+    procedure copyCurMonthDbfZatrToDbf(fileName : string);
   end;
 
 implementation
 
-procedure TDbfCopier.copyDbfZatrToDb(fileName : string);
+procedure TDbfCopier.copyCurMonthDbfZatrToDbf(fileName : string);
 begin
   if (fileName <> '') then
   begin
@@ -44,7 +44,7 @@ begin
     while (not dm.q_zatraDbf.Eof) do
     begin
       formZatrReportParams;
-      createZatrRecord(strukId, ksmIdPrep, dateMonthBegin, dateMonthEnd);
+      createZatrRecord(m_strukId, ksmIdPrep, dateMonthBegin, dateMonthEnd);
 
       createZatrMoneyRecord;
       dm.q_zatraDbf.Next;
@@ -57,6 +57,9 @@ begin
   inherited Create;
   self.db := db;
   setSets(sets);
+
+  dm.q_struk.Database := db.db;
+  dm.q_struk.Transaction := db.trans_read;
 end;
 
 procedure TDbfCopier.createZatrRecord(strukId, ksmIdPrep : integer; dateMonthBegin,
@@ -95,7 +98,7 @@ end;
 
 procedure TDbfCopier.formZatrReportParams;
 begin
-
+  m_strukId := dm.getStrukId(dm.q_zatraDbfSTRK.AsString);
 end;
 
 procedure TDbfCopier.setSets(var value: TSettings);
