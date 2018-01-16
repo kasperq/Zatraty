@@ -44,7 +44,7 @@ begin
     while (not dm.q_zatraDbf.Eof) do
     begin
       formZatrReportParams;
-      createZatrRecord(m_strukId, ksmIdPrep, dateMonthBegin, dateMonthEnd);
+      createZatrRecord(m_strukId, ksmIdPrep, m_sets.dateBeginMonth, m_sets.dateEnd);
 
       createZatrMoneyRecord;
       dm.q_zatraDbf.Next;
